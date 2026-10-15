@@ -16,11 +16,10 @@ FEEDS = [
     ("https://cointelegraph.com/rss", "Cointelegraph", "news", False),
     ("https://decrypt.co/feed", "Decrypt", "news", False),
     ("https://feeds.feedburner.com/CoinDesk", "CoinDesk", "news", False),
-    ("https://www.reddit.com/r/nostr/top/.rss?t=week", "r/nostr", "community", False),
-    ("https://www.reddit.com/r/Bitcoin/top/.rss?t=day", "r/Bitcoin", "community", False),
-    ("https://www.reddit.com/r/lightningnetwork/top/.rss?t=week", "r/lightningnetwork", "community", False),
-    ("https://www.reddit.com/r/CryptoCurrency/top/.rss?t=day", "r/CryptoCurrency", "community", False),
+    ("https://www.criptonoticias.com/feed/", "CriptoNoticias", "community", False),
     ("https://stacker.news/rss", "Stacker News", "community", False),
+    ("https://bitcoinops.org/feed.xml", "Bitcoin Optech", "community", False),
+    ("https://bitcoinist.com/feed/", "Bitcoinist", "community", False),
     ("https://hnrss.org/newest?q=bitcoin&points=40", "Hacker News", "buzz", False),
     ("https://hnrss.org/newest?q=nostr&points=10", "Hacker News", "buzz", False),
     ("https://www.theverge.com/rss/index.xml", "The Verge", "buzz", True),
@@ -31,7 +30,7 @@ CRYPTO_WORDS = ["bitcoin", "crypto", "cryptocurrency", "blockchain", "nostr", "l
                 "satoshi", "web3", "decentralized", "privacy", "encryption", "open source"]
 BAD = ["airdrop", "giveaway", "presale", "pre-sale", "price prediction", "sponsored", "casino", "promo code",
        "referral", "100x", "to the moon", "pump", "shill", "nsfw"]
-BAD_COMMUNITY = ["daily discussion", "weekly discussion", "megathread", "help me", "anyone know", "wtf", "meme monday"]
+BAD_COMMUNITY = ["megathread", "help me", "anyone know", "wtf"]
 BASE_TAGS = {"news": ["#Bitcoin", "#CryptoNews"], "community": ["#Bitcoin", "#plebchain"], "buzz": ["#Crypto", "#TechNews"]}
 TOPIC_TAGS = {"nostr": ["#nostr", "#grownostr"], "lightning": ["#Lightning", "#Zaps"], "zap": ["#Zaps"],
               "zaps": ["#Zaps"], "ethereum": ["#Ethereum"], "etf": ["#BitcoinETF"], "stablecoin": ["#Stablecoins"],

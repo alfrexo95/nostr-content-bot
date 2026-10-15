@@ -25,6 +25,13 @@ FEEDS = [
     ("https://www.theverge.com/rss/index.xml", "The Verge", "buzz", True),
     ("https://www.wired.com/feed/rss", "WIRED", "buzz", True),
 ]
+
+# --- Fuentes X vía RSSHub ---
+X_FEEDS = [
+    ("https://rsshub.app/twitter/user/AlertaMundoNews", "AlertaMundoNews", "news", False),
+    ("https://rsshub.app/twitter/user/AlertaNews24", "AlertaNews24", "news", False),
+]
+
 PREFER = ["nostr", "lightning", "bitcoin"]
 CRYPTO_WORDS = ["bitcoin", "crypto", "cryptocurrency", "blockchain", "nostr", "lightning", "ethereum", "stablecoin",
                 "satoshi", "web3", "decentralized", "privacy", "encryption", "open source"]
@@ -43,6 +50,8 @@ HOOKS = {
 }
 ICONS = {"news": "📰", "community": "💬", "buzz": "🔥"}
 QUESTIONS = ["What do you think? 👇", "Thoughts? Reply below 👇", "Agree or disagree? 👇", "Would you use this? 👇"]
+
+X_SUPPORT = "\n\n⚡ Support this news bot with a zap: {addr} #Nostr #Zaps".format(addr=ADDR)
 
 CURIOSITIES = [
 "Fun fact: Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. No company, no central server, just keys and relays. 🔑 #Nostr #Bitcoin",
@@ -213,12 +222,41 @@ def pick(cat, seen):
             if need_kw and not any(has_word(low, w) for w in CRYPTO_WORDS): continue
             score = sum(2 if k == "nostr" else 1 for k in PREFER if has_word(low, k))
             pool.append((score, title, link, name)); taken += 1
+
+    for url, name, c, need_kw in X_FEEDS:
+        if c != cat: continue
+        try:
+            items = parse_feed(get_url(url))
+        except Exception as e:
+            print("X", name, "error:", e); continue
+        taken = 0
+        for title, link in items:
+            if taken >= 5: break
+            link = clean_link(link); low = title.lower()
+            if len(title) < 15 or len(title) > 280 or not link or link in seen: continue
+            if any(b in low for b in BAD): continue
+            if need_kw and not any(has_word(low, w) for w in CRYPTO_WORDS): continue
+            score = 3
+            pool.append((score, title, link, name)); taken += 1
+
     if not pool: return None
     best = max(x[0] for x in pool)
     score, title, link, name = random.choice([x for x in pool if x[0] == best])
     text = random.choice(HOOKS[cat]) + "\n\n" + ICONS[cat] + " " + title + "\n" + link + "\n\nvia " + name
-    if cat != "news": text += "\n\n" + random.choice(QUESTIONS)
-    text += "\n" + tags_for(title, cat)
+    if cat != "news":
+        text += "\n\n" + random.choice(QUESTIONS)
+    if any(name == x_name for _, x_name, _, _ in X_FEEDS):
+        hashtags = re.findall(r"#(\w+)", title)
+        base = ["#Bitcoin", "#CryptoNews", "#Breaking"]
+        seen_ht = set()
+        ht_list = []
+        for h in hashtags + base:
+            if h.lower() not in seen_ht:
+                seen_ht.add(h.lower()); ht_list.append("#" + h)
+        text += " " + " ".join(ht_list[:6])
+        text += X_SUPPORT
+    else:
+        text += "\n" + tags_for(title, cat)
     return {"text": text, "link": link}
 
 def evergreen(st):

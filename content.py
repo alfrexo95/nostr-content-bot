@@ -26,10 +26,27 @@ FEEDS = [
     ("https://www.wired.com/feed/rss", "WIRED", "buzz", True),
 ]
 
-# --- NUEVAS FUENTES: Canales de Telegram (scraping web) ---
+# --- Fuentes Telegram (scraping web) ---
 TG_FEEDS = [
     ("alertamundialnews", "AlertaMundoNews", "news"),
     ("AlertaNews24oficial", "AlertaNews24", "news"),
+]
+
+# --- Meta solidaria (1000 USD en sats) ---
+MISSION = """🎯 MISSION: Reach 1,000,000 sats (≈ $1000) in zaps to grow this Nostr profile.
+Every sat collected will help build tools and content for a community living under blockade and economic crisis.
+This is not charity — it's proof that decentralized solidarity works. ⚡
+Zap if you believe in a freer world. #Nostr #Bitcoin #Cuba"""
+
+# --- Cuentas destacadas de Nostr (npubs verificados) ---
+FEATURED = [
+    ("fiatjaf", "nostr:npub180cvv07tjdrrgpa0j7j7tmnyl2yr6yr7l8j4s3evf6u64th6gkwsyjh6w6"),
+    ("Jack Dorsey", "nostr:npub1sg6plzptd64u62a878hep2kev88swjh3tw00gjs"),
+    ("Snowden", "nostr:npub1sn0wdenkukak0d9dfczzeacvhkrgz92ak56egt7vdgzn8pv2wfqqhrjdv9"),
+    ("ODELL", "nostr:npub1qny3tkh0acurzla8x3zy4nhrjz5zd8l9sy9jys09umwng00manysew95gx"),
+    ("MartyBent", "nostr:npub1guh5grefa7vkay4ps6udxg8lrqxg2kgr3qh9n4gduxut64nfxq0q9y6hjy"),
+    ("Cuba Bitcoin", "nostr:npub1huyn6ru55pv6l7p0sxvlu3vfpq7pan958sl4weft0kte6lvdvvksd5s34t"),
+    ("DarthCoin", "nostr:npub1lxktpvp5cnq3wl5ctu2x88e30mc0ahh8v47qvzc5dmneqqjrzlkqpm5xlc"),
 ]
 
 PREFER = ["nostr", "lightning", "bitcoin"]
@@ -51,7 +68,6 @@ HOOKS = {
 ICONS = {"news": "📰", "community": "💬", "buzz": "🔥"}
 QUESTIONS = ["What do you think? 👇", "Thoughts? Reply below 👇", "Agree or disagree? 👇", "Would you use this? 👇"]
 
-# Mensaje de apoyo/zapeo para publicaciones de fuentes externas (Telegram)
 X_SUPPORT = "\n\n⚡ Support this news bot with a zap: {addr} #Nostr #Zaps".format(addr=ADDR)
 
 CURIOSITIES = [
@@ -169,7 +185,6 @@ def get_url(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; nostr-content-bot/1.0)"})
     return urllib.request.urlopen(req, timeout=25).read()
 
-# --- NUEVA FUNCIÓN: scraping de canales de Telegram ---
 def fetch_telegram_channel(channel):
     """Descarga la página web de un canal de Telegram y extrae los mensajes."""
     url = f"https://t.me/s/{channel}"
@@ -178,18 +193,15 @@ def fetch_telegram_channel(channel):
     except Exception as e:
         print(f"TG {channel} error: {e}")
         return []
-    # Extraer los bloques de mensajes
     blocks = re.findall(r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', data, re.DOTALL)
     out = []
     for b in blocks:
-        # Limpiar HTML: quitar tags, enlaces, y decodificar entidades
         text = re.sub(r"<br\s*/?>", "\n", b)
         text = re.sub(r"<[^>]+>", " ", text)
         text = html.unescape(text)
         text = re.sub(r"\s+", " ", text).strip()
         if len(text) < 15:
             continue
-        # El enlace al mensaje: buscar el data-post
         post = re.search(r'data-post="([^"]+)"', data)
         link = f"https://t.me/{channel}" if not post else f"https://t.me/{post.group(1)}"
         out.append((text, link))
@@ -251,7 +263,7 @@ def pick(cat, seen):
             score = sum(2 if k == "nostr" else 1 for k in PREFER if has_word(low, k))
             pool.append((score, title, link, name)); taken += 1
 
-    # Fuentes de Telegram
+    # Fuentes Telegram
     for channel, name, c in TG_FEEDS:
         if c != cat: continue
         items = fetch_telegram_channel(channel)
@@ -270,6 +282,8 @@ def pick(cat, seen):
     text = random.choice(HOOKS[cat]) + "\n\n" + ICONS[cat] + " " + title + "\n" + link + "\n\nvia " + name
     if cat != "news":
         text += "\n\n" + random.choice(QUESTIONS)
+
+    # --- Añadir soporte y hashtags si es fuente Telegram ---
     if any(name == tg_name for _, tg_name, _ in TG_FEEDS):
         hashtags = re.findall(r"#(\w+)", title)
         base = ["#Bitcoin", "#CryptoNews", "#Breaking"]
@@ -282,6 +296,12 @@ def pick(cat, seen):
         text += X_SUPPORT
     else:
         text += "\n" + tags_for(title, cat)
+
+    # --- AÑADIR MISIÓN Y CUENTAS DESTACADAS A TODAS LAS PUBLICACIONES ---
+    text += "\n\n" + MISSION
+    mention_list = " ".join([f"{name} ({npub})" for name, npub in FEATURED[:5]])
+    text += "\n\nFollow these Nostr leaders: " + mention_list
+
     return {"text": text, "link": link}
 
 def evergreen(st):
@@ -292,6 +312,10 @@ def evergreen(st):
     st["idx"][kind] = idx + 1
     if kind == "ask": text = text.format(addr=ADDR)
     elif idx % 2 == 0: text += "\n\n⚡ " + ADDR
+    # Añadir misión y destacados también a los evergreen
+    text += "\n\n" + MISSION
+    mention_list = " ".join([f"{name} ({npub})" for name, npub in FEATURED[:5]])
+    text += "\n\nFollow these Nostr leaders: " + mention_list
     return text
 
 def load():

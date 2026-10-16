@@ -10,6 +10,10 @@ RELAYS = ["wss://relay.primal.net", "wss://relay.damus.io", "wss://nos.lol", "ws
 DIR = os.path.dirname(os.path.abspath(__file__))
 ATOM = "{http://www.w3.org/2005/Atom}"
 
+# --- Meta NIP-75 (Zap Goal) ---
+GOAL_AMOUNT_MSATS = 1000000000  # 1,000,000 sats = 1,000,000,000 milisats
+GOAL_SUMMARY = "Reach 1,000,000 sats to grow this Nostr profile and support a community under blockade and economic crisis."
+
 # (url, nombre, categoria, exigir_palabras_cripto)
 FEEDS = [
     ("https://bitcoinmagazine.com/feed", "Bitcoin Magazine", "news", False),
@@ -162,13 +166,29 @@ def sign(msg, sk):
     e = int.from_bytes(th("BIP0340/challenge", rx, px, msg), 'big') % n
     return (rx + ((k + e * d) % n).to_bytes(32, 'big')).hex()
 
-def make_event(sk, content):
+def make_event(sk, content, kind=1, extra_tags=None):
     tags = [["t", t.lower()] for t in re.findall(r"#(\w+)", content)]
+    if extra_tags:
+        tags.extend(extra_tags)
     pub = mul(G, int(sk, 16))[0].to_bytes(32, 'big').hex()
     ts = int(time.time())
-    raw = json.dumps([0, pub, ts, 1, tags, content], separators=(',', ':'), ensure_ascii=False)
+    raw = json.dumps([0, pub, ts, kind, tags, content], separators=(',', ':'), ensure_ascii=False)
     eid = hashlib.sha256(raw.encode()).digest()
-    return {"id": eid.hex(), "pubkey": pub, "created_at": ts, "kind": 1, "tags": tags, "content": content, "sig": sign(eid, sk)}
+    return {"id": eid.hex(), "pubkey": pub, "created_at": ts, "kind": kind, "tags": tags, "content": content, "sig": sign(eid, sk)}
+
+def make_goal_event(sk):
+    """Crea el evento NIP-75 (kind 9041) para la meta de 1,000,000 sats."""
+    content = MISSION
+    tags = [
+        ["relays"] + RELAYS,
+        ["amount", str(GOAL_AMOUNT_MSATS)],
+        ["summary", GOAL_SUMMARY],
+    ]
+    pub = mul(G, int(sk, 16))[0].to_bytes(32, 'big').hex()
+    ts = int(time.time())
+    raw = json.dumps([0, pub, ts, 9041, tags, content], separators=(',', ':'), ensure_ascii=False)
+    eid = hashlib.sha256(raw.encode()).digest()
+    return {"id": eid.hex(), "pubkey": pub, "created_at": ts, "kind": 9041, "tags": tags, "content": content, "sig": sign(eid, sk)}
 
 async def send(url, ev):
     try:
@@ -245,7 +265,6 @@ def tags_for(title, cat):
 
 def pick(cat, seen):
     pool = []
-    # Fuentes RSS normales
     for url, name, c, need_kw in FEEDS:
         if c != cat: continue
         try:
@@ -263,7 +282,6 @@ def pick(cat, seen):
             score = sum(2 if k == "nostr" else 1 for k in PREFER if has_word(low, k))
             pool.append((score, title, link, name)); taken += 1
 
-    # Fuentes Telegram
     for channel, name, c in TG_FEEDS:
         if c != cat: continue
         items = fetch_telegram_channel(channel)
@@ -282,8 +300,6 @@ def pick(cat, seen):
     text = random.choice(HOOKS[cat]) + "\n\n" + ICONS[cat] + " " + title + "\n" + link + "\n\nvia " + name
     if cat != "news":
         text += "\n\n" + random.choice(QUESTIONS)
-
-    # --- Añadir soporte y hashtags si es fuente Telegram ---
     if any(name == tg_name for _, tg_name, _ in TG_FEEDS):
         hashtags = re.findall(r"#(\w+)", title)
         base = ["#Bitcoin", "#CryptoNews", "#Breaking"]
@@ -296,12 +312,9 @@ def pick(cat, seen):
         text += X_SUPPORT
     else:
         text += "\n" + tags_for(title, cat)
-
-    # --- AÑADIR MISIÓN Y CUENTAS DESTACADAS A TODAS LAS PUBLICACIONES ---
     text += "\n\n" + MISSION
     mention_list = " ".join([f"{name} ({npub})" for name, npub in FEATURED[:5]])
     text += "\n\nFollow these Nostr leaders: " + mention_list
-
     return {"text": text, "link": link}
 
 def evergreen(st):
@@ -312,7 +325,6 @@ def evergreen(st):
     st["idx"][kind] = idx + 1
     if kind == "ask": text = text.format(addr=ADDR)
     elif idx % 2 == 0: text += "\n\n⚡ " + ADDR
-    # Añadir misión y destacados también a los evergreen
     text += "\n\n" + MISSION
     mention_list = " ".join([f"{name} ({npub})" for name, npub in FEATURED[:5]])
     text += "\n\nFollow these Nostr leaders: " + mention_list
@@ -322,10 +334,31 @@ def load():
     path = os.path.join(DIR, "state.json")
     s = json.load(open(path)) if os.path.exists(path) else {}
     s.setdefault("seen", []); s.setdefault("n", 0); s.setdefault("idx", {})
+    s.setdefault("goal_id", None)
     return s
 
 async def main():
     st = load(); seen = set(st["seen"]); posts = []
+    nsec = os.environ.get("NOSTR_NSEC", "").strip()
+    if not nsec and not DRY:
+        print("Falta el secreto NOSTR_NSEC"); return
+    sk = nsec_to_hex(nsec) if nsec else None
+
+    # --- Publicar o recuperar el evento de meta NIP-75 ---
+    goal_id = st.get("goal_id")
+    if not goal_id and sk:
+        goal_ev = make_goal_event(sk)
+        print("Publicando evento de meta NIP-75...")
+        results = await asyncio.gather(*[send(r, goal_ev) for r in RELAYS])
+        if any(results):
+            goal_id = goal_ev["id"]
+            st["goal_id"] = goal_id
+            print("✅ Meta publicada con id:", goal_id)
+        else:
+            print("⚠️ No se pudo publicar la meta en ningún relay")
+    elif goal_id:
+        print("ℹ️ Usando meta existente:", goal_id)
+
     news = pick("news", seen)
     if news: posts.append(news); seen.add(news["link"])
     order = ["community", "buzz"] if st["n"] % 2 == 0 else ["buzz", "community"]
@@ -334,16 +367,15 @@ async def main():
         if it:
             posts.append(it); seen.add(it["link"]); break
     posts.append({"text": evergreen(st), "link": None})
+
     if DRY:
         for x in posts: print("[DRY]\n" + x["text"] + "\n")
         return
-    nsec = os.environ.get("NOSTR_NSEC", "").strip()
-    if not nsec:
-        print("Falta el secreto NOSTR_NSEC"); return
-    sk = nsec_to_hex(nsec)
+
     for i, x in enumerate(posts):
         if i: await asyncio.sleep(45)
-        ev = make_event(sk, x["text"])
+        extra = [["goal", goal_id]] if goal_id else []
+        ev = make_event(sk, x["text"], kind=1, extra_tags=extra)
         ok = any(await asyncio.gather(*[send(r, ev) for r in RELAYS]))
         if ok and x["link"]: st["seen"] = (st["seen"] + [x["link"]])[-400:]
         print("Publicada" if ok else "No se publico", "->", x["text"][:60].replace("\n", " "))

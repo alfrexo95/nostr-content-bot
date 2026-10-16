@@ -26,10 +26,10 @@ FEEDS = [
     ("https://www.wired.com/feed/rss", "WIRED", "buzz", True),
 ]
 
-# --- Fuentes X vía RSSHub ---
-X_FEEDS = [
-    ("https://rsshub.app/twitter/user/AlertaMundoNews", "AlertaMundoNews", "news", False),
-    ("https://rsshub.app/twitter/user/AlertaNews24", "AlertaNews24", "news", False),
+# --- NUEVAS FUENTES: Canales de Telegram (scraping web) ---
+TG_FEEDS = [
+    ("alertamundialnews", "AlertaMundoNews", "news"),
+    ("AlertaNews24oficial", "AlertaNews24", "news"),
 ]
 
 PREFER = ["nostr", "lightning", "bitcoin"]
@@ -51,6 +51,7 @@ HOOKS = {
 ICONS = {"news": "📰", "community": "💬", "buzz": "🔥"}
 QUESTIONS = ["What do you think? 👇", "Thoughts? Reply below 👇", "Agree or disagree? 👇", "Would you use this? 👇"]
 
+# Mensaje de apoyo/zapeo para publicaciones de fuentes externas (Telegram)
 X_SUPPORT = "\n\n⚡ Support this news bot with a zap: {addr} #Nostr #Zaps".format(addr=ADDR)
 
 CURIOSITIES = [
@@ -168,6 +169,32 @@ def get_url(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; nostr-content-bot/1.0)"})
     return urllib.request.urlopen(req, timeout=25).read()
 
+# --- NUEVA FUNCIÓN: scraping de canales de Telegram ---
+def fetch_telegram_channel(channel):
+    """Descarga la página web de un canal de Telegram y extrae los mensajes."""
+    url = f"https://t.me/s/{channel}"
+    try:
+        data = get_url(url).decode("utf-8", errors="ignore")
+    except Exception as e:
+        print(f"TG {channel} error: {e}")
+        return []
+    # Extraer los bloques de mensajes
+    blocks = re.findall(r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', data, re.DOTALL)
+    out = []
+    for b in blocks:
+        # Limpiar HTML: quitar tags, enlaces, y decodificar entidades
+        text = re.sub(r"<br\s*/?>", "\n", b)
+        text = re.sub(r"<[^>]+>", " ", text)
+        text = html.unescape(text)
+        text = re.sub(r"\s+", " ", text).strip()
+        if len(text) < 15:
+            continue
+        # El enlace al mensaje: buscar el data-post
+        post = re.search(r'data-post="([^"]+)"', data)
+        link = f"https://t.me/{channel}" if not post else f"https://t.me/{post.group(1)}"
+        out.append((text, link))
+    return out[:10]
+
 def clean(t):
     t = html.unescape(re.sub(r"<[^>]+>", " ", t or ""))
     return re.sub(r"\s+", " ", t).strip()
@@ -206,6 +233,7 @@ def tags_for(title, cat):
 
 def pick(cat, seen):
     pool = []
+    # Fuentes RSS normales
     for url, name, c, need_kw in FEEDS:
         if c != cat: continue
         try:
@@ -223,19 +251,16 @@ def pick(cat, seen):
             score = sum(2 if k == "nostr" else 1 for k in PREFER if has_word(low, k))
             pool.append((score, title, link, name)); taken += 1
 
-    for url, name, c, need_kw in X_FEEDS:
+    # Fuentes de Telegram
+    for channel, name, c in TG_FEEDS:
         if c != cat: continue
-        try:
-            items = parse_feed(get_url(url))
-        except Exception as e:
-            print("X", name, "error:", e); continue
+        items = fetch_telegram_channel(channel)
         taken = 0
         for title, link in items:
             if taken >= 5: break
-            link = clean_link(link); low = title.lower()
+            low = title.lower()
             if len(title) < 15 or len(title) > 280 or not link or link in seen: continue
             if any(b in low for b in BAD): continue
-            if need_kw and not any(has_word(low, w) for w in CRYPTO_WORDS): continue
             score = 3
             pool.append((score, title, link, name)); taken += 1
 
@@ -245,7 +270,7 @@ def pick(cat, seen):
     text = random.choice(HOOKS[cat]) + "\n\n" + ICONS[cat] + " " + title + "\n" + link + "\n\nvia " + name
     if cat != "news":
         text += "\n\n" + random.choice(QUESTIONS)
-    if any(name == x_name for _, x_name, _, _ in X_FEEDS):
+    if any(name == tg_name for _, tg_name, _ in TG_FEEDS):
         hashtags = re.findall(r"#(\w+)", title)
         base = ["#Bitcoin", "#CryptoNews", "#Breaking"]
         seen_ht = set()

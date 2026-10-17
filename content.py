@@ -74,6 +74,35 @@ QUESTIONS = ["What do you think? 👇", "Thoughts? Reply below 👇", "Agree or 
 
 X_SUPPORT = "\n\n⚡ Support this news bot with a zap: {addr} #Nostr #Zaps".format(addr=ADDR)
 
+# --- Imágenes y Mensajes de Hype (1 vez por semana) ---
+IMAGE_URLS = [
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto1.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto2.png",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto3.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto4.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto5.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto6.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto7.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto8.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto9.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto10.jpg",
+    "https://raw.githubusercontent.com/alfrexo95/nostr-content-bot/main/imagenes/foto11.png"
+]
+
+NOSTR_HYPE_MESSAGES = [
+    "Nostr is the protocol for free speech. No censors, no algorithms, just pure human connection. 🔑",
+    "Your keys, your identity, your data. Nostr puts the power back in your hands. ⚡",
+    "While other networks sell your data, Nostr gives you sovereignty. The future is decentralized. 🌐",
+    "Nostr is not just an app, it's a revolution. A global, permissionless network built for freedom. 🚀",
+    "No gatekeepers. No banning. Just Bitcoiners, builders, and free thinkers on Nostr. 🛡️",
+    "The revolution will not be centralized. Join the Nostr network and own your voice. ✊",
+    "Real conversations, real people, real freedom. Nostr is how social media was meant to be. 🤝",
+    "Zaps let you put your sats where your values are. Nostr is the value-for-value internet. ⚡",
+    "The best thing about Nostr? You can't be deplatformed. Your voice is forever yours. 🗝️",
+    "Censorship-resistant. Decentralized. Unstoppable. Welcome to Nostr. 🌍"
+]
+
+# --- Curiosities (Duplicadas) ---
 CURIOSITIES = [
 "Fun fact: Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. No company, no central server, just keys and relays. 🔑 #Nostr #Bitcoin",
 "Fun fact: 1 bitcoin is 100,000,000 sats. The smallest unit is named after Satoshi Nakamoto, so every zap is a tiny tribute. ⚡ #Bitcoin #Zaps",
@@ -88,7 +117,22 @@ CURIOSITIES = [
 "Fun fact: a Nostr NIP-05 address looks like an email (name@domain.com) and ties your key to a domain name. #Nostr #NIP05",
 "Fun fact: Bitcoin's first block contains a newspaper headline about bank bailouts, a hint about why Bitcoin was created. #Bitcoin",
 "Fun fact: Nostr was started by a pseudonymous developer known as fiatjaf, and it keeps growing through open proposals called NIPs. #Nostr",
+"Fun fact: relays don't actually know who you are unless your client tells them. Nostr is pseudonymous by design. 🎭 #Nostr",
+"Fun fact: Satoshi Nakamoto's last known public message was in December 2010. Since then, the network runs on its own. 👻 #Bitcoin",
+"Fun fact: Lightning Network channel capacities are public, but individual balances are private. It's a layer of privacy. 🕵️ #Lightning",
+"Fun fact: NIP-05 is basically DNS for Nostr. It proves you own a domain without exposing your private keys. #Nostr #NIP05",
+"Fun fact: Bitcoin mining is just guessing a number repeatedly until you get the right hash. It's proof of work. 🎲 #Bitcoin",
+"Fun fact: every Lightning payment requires two nodes to have a channel with enough liquidity. It's a routing game. 🚦 #Lightning",
+"Fun fact: cold wallets are immune to remote hacks because the private keys never touch the internet. 🧊 #Bitcoin #Security",
+"Fun fact: Nostr is built on cryptography, not trust. You don't need to trust a server to verify a signature. 🔐 #Nostr",
+"Fun fact: Bitcoin has 8 decimal places. The smallest unit is a satoshi, but you can divide a satoshi off-chain on Lightning. ⚡ #Bitcoin",
+"Fun fact: you can run a Nostr relay on a Raspberry Pi. It's incredibly lightweight. 🍓 #Nostr",
+"Fun fact: Zaps are just Lightning invoices with a Nostr event attached. It's a clever way to combine two protocols. 🧩 #Nostr #Lightning",
+"Fun fact: the Nostr logo is a key because it represents your control over your identity and data. 🗝️ #Nostr",
+"Fun fact: Bitcoin's consensus is Nakamoto Consensus. It solved the Byzantine Generals' Problem. 🏛️ #Bitcoin"
 ]
+
+# --- Jokes (Duplicadas) ---
 JOKES = [
 "Why did the Nostr user cross the road? To reach a better relay. 😄 #Nostr",
 "I told my relay a joke. It stored it, forwarded it to everyone, and I still didn't get a zap. #Nostr #Zaps",
@@ -100,7 +144,19 @@ JOKES = [
 "Other apps: 'You may like this.' Nostr: 'You choose your feed.' 😎 #Nostr",
 "Me: 'I'll just check Nostr for a minute.' Also me, three hours later, still zapping. ⚡ #Nostr",
 "Why don't relays get lonely? Someone is always forwarding them messages. #Nostr",
+"Why did the Bitcoiner break up with the bank? Because it was too centralized. 🏦 #Bitcoin",
+"A Lightning Network walks into a bar. The bartender says, 'What's the rush?' ⚡ #Lightning",
+"What's a Bitcoiner's favorite dance? The HODL. 💃 #Bitcoin",
+"Why are Nostr users so good at keeping secrets? They know the value of an nsec. 🤫 #Nostr",
+"What do you call a Bitcoin that never moves? A HODLer's retirement fund. 💎🙌 #Bitcoin",
+"Why did the relay server go to therapy? Too many unresolved notes. 🛋️ #Nostr",
+"What's the difference between a Bitcoiner and a magician? One makes money disappear, the other makes it appear. 🎩 #Bitcoin",
+"How many Bitcoiners does it take to change a lightbulb? None, they just wait for the halving to make it shine brighter. 💡 #Bitcoin",
+"What's a pizza's favorite crypto? Bitcoin, of course. 🍕 #BitcoinPizzaDay",
+"Why don't Bitcoiners ever get lost? Because they always follow the whitepaper. 📜 #Bitcoin"
 ]
+
+# --- Tips (Duplicadas) ---
 TIPS = [
 "Tip: back up your nsec offline (paper or a password manager). If you lose it, nobody can recover your account. #Nostr #Security",
 "Tip: use a signer app like Amber on Android so your nsec isn't stored in every Nostr app you try. #Nostr #Amber",
@@ -112,7 +168,18 @@ TIPS = [
 "Tip: new on Nostr? Say hi with #introductions and follow a few accounts in your interests. The feed is yours. #grownostr",
 "Tip: when sending bitcoin to a new address, send a small test amount first. Mistakes can't be undone. #Bitcoin",
 "Tip: Lightning wallets differ: some hold your funds for you, others give you the keys. Know which one you use. ⚡ #Lightning #SelfCustody",
+"Tip: Use a hardware wallet for long-term storage. 'Not your keys, not your coins.' 🔐 #Bitcoin #Security",
+"Tip: Nostr isn't just for crypto. Share your hobbies, art, and thoughts. It's a social network for everyone. 🎨 #Nostr",
+"Tip: Lightning addresses (name@domain) make zapping as easy as sending an email. ⚡ #Lightning",
+"Tip: Be careful with public Wi-Fi when accessing wallets. Use a VPN or mobile data. 📶 #Security",
+"Tip: Review your relay list periodically. Some relays go offline or change their policies. 🔄 #Nostr",
+"Tip: You can use NIP-05 to verify your identity. It's the blue checkmark of Nostr, but decentralized. ✔️ #Nostr",
+"Tip: Always verify the receiving address before sending sats. Copy-paste errors happen. 👀 #Bitcoin",
+"Tip: Zaps are public by default, but you can send private zaps if you want to tip anonymously. 🕵️ #Zaps",
+"Tip: Set a strong password for your email, as it's the backup for many services. 🔑 #Security",
+"Tip: Contribute to the community by running your own relay. It helps the network grow. 🌐 #Nostr"
 ]
+
 ASKS = [
 "If this account makes your feed better, a zap helps keep the posts coming. Thank you for the support! ⚡ {addr} #Nostr #Zaps",
 "Enjoying these crypto and Nostr posts? Zap, repost or reply: all three help more than you think. ⚡ {addr} #Nostr",
@@ -330,11 +397,30 @@ def evergreen(st):
     text += "\n\nFollow these Nostr leaders: " + mention_list
     return text
 
+def image_post(st):
+    """Publica una imagen solo los lunes (1 vez por semana) con un mensaje aleatorio."""
+    if time.localtime().tm_wday != 0:
+        return None
+        
+    if not IMAGE_URLS:
+        return None
+        
+    idx = st.get("img_idx", 0) % len(IMAGE_URLS)
+    img_url = IMAGE_URLS[idx]
+    st["img_idx"] = idx + 1
+    
+    phrase = random.choice(NOSTR_HYPE_MESSAGES)
+    
+    text = phrase + "\n\n" + img_url + "\n\n" + MISSION
+    mention_list = " ".join([f"{name} ({npub})" for name, npub in FEATURED[:5]])
+    text += "\n\nFollow these Nostr leaders: " + mention_list
+    return {"text": text, "link": None}
+
 def load():
     path = os.path.join(DIR, "state.json")
     s = json.load(open(path)) if os.path.exists(path) else {}
     s.setdefault("seen", []); s.setdefault("n", 0); s.setdefault("idx", {})
-    s.setdefault("goal_id", None)
+    s.setdefault("goal_id", None); s.setdefault("img_idx", 0)
     return s
 
 async def main():
@@ -367,6 +453,11 @@ async def main():
         if it:
             posts.append(it); seen.add(it["link"]); break
     posts.append({"text": evergreen(st), "link": None})
+
+    # --- Añadir la imagen si es Lunes ---
+    img = image_post(st)
+    if img:
+        posts.append(img)
 
     if DRY:
         for x in posts: print("[DRY]\n" + x["text"] + "\n")

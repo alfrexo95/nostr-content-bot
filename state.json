@@ -3,13 +3,16 @@
   "https://t.me/AlertaNews24oficial/18508",
   "https://www.criptonoticias.com/mercados/nuevas-ballenas-bitcoin-mercado-bajista-moreno-devicente/",
   "https://t.me/alertamundialnews/1488",
-  "https://gitlab.com/soapbox-pub/ditto/-/blob/main/WALLET.md"
+  "https://gitlab.com/soapbox-pub/ditto/-/blob/main/WALLET.md",
+  "https://t.me/alertamundialnews/1489",
+  "https://bitcoinops.org/en/newsletters/2026/10/09/"
  ],
- "n": 2,
+ "n": 3,
  "idx": {
   "curiosity": 1,
-  "joke": 1
+  "joke": 1,
+  "tip": 1
  },
  "goal_id": "88bae13387ff6a8aaa41c38d4fb94403fea168c2704b28edb02bd56fe72b2b5a",
- "img_idx": 0
+ "img_idx": 1
 }

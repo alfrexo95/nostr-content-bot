@@ -5,11 +5,13 @@
   "https://t.me/alertamundialnews/1488",
   "https://gitlab.com/soapbox-pub/ditto/-/blob/main/WALLET.md",
   "https://t.me/alertamundialnews/1489",
-  "https://bitcoinops.org/en/newsletters/2026/10/09/"
+  "https://bitcoinops.org/en/newsletters/2026/10/09/",
+  "https://t.me/AlertaNews24oficial/18515",
+  "https://en.andros.dev/blog/4c4e1b40/building-a-decentralized-bulletin-board-and-accidentally-reinventing-nostr/"
  ],
- "n": 3,
+ "n": 4,
  "idx": {
-  "curiosity": 1,
+  "curiosity": 2,
   "joke": 1,
   "tip": 1
  },

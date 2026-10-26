@@ -9,14 +9,16 @@
   "https://t.me/AlertaNews24oficial/18515",
   "https://en.andros.dev/blog/4c4e1b40/building-a-decentralized-bulletin-board-and-accidentally-reinventing-nostr/",
   "https://t.me/AlertaNews24oficial/18518",
-  "https://entropy.magicinternetmath.com/"
+  "https://entropy.magicinternetmath.com/",
+  "https://bitcoinmagazine.com/videos/coinbase-institutional-co-ceo-bitcoins-second-wave-of-institutional-capital-has-arrived",
+  "https://markets.basicswapdex.com"
  ],
- "n": 5,
+ "n": 6,
  "idx": {
   "curiosity": 2,
   "joke": 2,
-  "tip": 1
+  "tip": 2
  },
  "goal_id": "88bae13387ff6a8aaa41c38d4fb94403fea168c2704b28edb02bd56fe72b2b5a",
- "img_idx": 1
+ "img_idx": 2
 }

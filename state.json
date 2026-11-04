@@ -17,12 +17,14 @@
   "https://bitcoinmagazine.com/videos/tyler-evans-bitcoin-etf-flows-flipped-from-highly-negative-to-strong-accumulation",
   "https://mostroeuropa.shadowbip.com/",
   "https://bitcoinmagazine.com/videos/adam-back-pension-funds-are-bitcoins-third-wave-of-adoption",
-  "https://www.criptonoticias.com/tecnologia/falla-critica-linux-hay-riesgo-ecosistema-bitcoin-e/"
+  "https://www.criptonoticias.com/tecnologia/falla-critica-linux-hay-riesgo-ecosistema-bitcoin-e/",
+  "https://bitcoinmagazine.com/news/matt-corallo-flags-critical-linux-kernel-flaw-lightning-labs-ships-lnd-mitigation",
+  "https://github.com/dtonon/squalk"
  ],
- "n": 9,
+ "n": 10,
  "idx": {
   "curiosity": 4,
-  "joke": 2,
+  "joke": 3,
   "tip": 2,
   "ask": 1
  },

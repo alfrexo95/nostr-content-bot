@@ -19,13 +19,15 @@
   "https://bitcoinmagazine.com/videos/adam-back-pension-funds-are-bitcoins-third-wave-of-adoption",
   "https://www.criptonoticias.com/tecnologia/falla-critica-linux-hay-riesgo-ecosistema-bitcoin-e/",
   "https://bitcoinmagazine.com/news/matt-corallo-flags-critical-linux-kernel-flaw-lightning-labs-ships-lnd-mitigation",
-  "https://github.com/dtonon/squalk"
+  "https://github.com/dtonon/squalk",
+  "https://decrypt.co/382733/bitcoin-etfs-bleed-430-million-tech-rout-tests-wall-street",
+  "https://bitcoinops.org/en/podcast/2026/10/27/"
  ],
- "n": 10,
+ "n": 11,
  "idx": {
   "curiosity": 4,
   "joke": 3,
-  "tip": 2,
+  "tip": 3,
   "ask": 1
  },
  "goal_id": "88bae13387ff6a8aaa41c38d4fb94403fea168c2704b28edb02bd56fe72b2b5a",

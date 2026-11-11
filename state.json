@@ -23,12 +23,14 @@
   "https://decrypt.co/382733/bitcoin-etfs-bleed-430-million-tech-rout-tests-wall-street",
   "https://bitcoinops.org/en/podcast/2026/10/27/",
   "https://cointelegraph.com/markets/bitcoin-stocks-nvidia-analyst-68k-target",
-  "https://bitcoinops.org/en/newsletters/2026/10/23/"
+  "https://bitcoinops.org/en/newsletters/2026/10/23/",
+  "https://www.coindesk.com/markets/2026/11/11/coreweave-earnings-revive-ai-outlook-as-anthropic-weighs-higher-ipo-valuation",
+  "https://stacker.news/items/1612661"
  ],
- "n": 12,
+ "n": 13,
  "idx": {
   "curiosity": 5,
-  "joke": 3,
+  "joke": 4,
   "tip": 3,
   "ask": 1
  },

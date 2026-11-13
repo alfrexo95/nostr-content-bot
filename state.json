@@ -25,13 +25,15 @@
   "https://cointelegraph.com/markets/bitcoin-stocks-nvidia-analyst-68k-target",
   "https://bitcoinops.org/en/newsletters/2026/10/23/",
   "https://www.coindesk.com/markets/2026/11/11/coreweave-earnings-revive-ai-outlook-as-anthropic-weighs-higher-ipo-valuation",
-  "https://stacker.news/items/1612661"
+  "https://stacker.news/items/1612661",
+  "https://cointelegraph.com/news/metaplanet-swings-170m-loss-bitcoin-sale-earnings",
+  "https://bitcoinist.com/bitcoin-enters-the-ai-economy-as-lightning-labs-launches-payments-for-autonomous-agents/"
  ],
- "n": 13,
+ "n": 14,
  "idx": {
   "curiosity": 5,
   "joke": 4,
-  "tip": 3,
+  "tip": 4,
   "ask": 1
  },
  "goal_id": "88bae13387ff6a8aaa41c38d4fb94403fea168c2704b28edb02bd56fe72b2b5a",

@@ -27,15 +27,17 @@
   "https://www.coindesk.com/markets/2026/11/11/coreweave-earnings-revive-ai-outlook-as-anthropic-weighs-higher-ipo-valuation",
   "https://stacker.news/items/1612661",
   "https://cointelegraph.com/news/metaplanet-swings-170m-loss-bitcoin-sale-earnings",
-  "https://bitcoinist.com/bitcoin-enters-the-ai-economy-as-lightning-labs-launches-payments-for-autonomous-agents/"
+  "https://bitcoinist.com/bitcoin-enters-the-ai-economy-as-lightning-labs-launches-payments-for-autonomous-agents/",
+  "https://cointelegraph.com/news/nvidia-turmoil-tests-bitcoin-miners-ai-funding-plans",
+  "https://bitcoinops.org/en/podcast/2026/10/13/"
  ],
- "n": 14,
+ "n": 15,
  "idx": {
-  "curiosity": 5,
+  "curiosity": 6,
   "joke": 4,
   "tip": 4,
   "ask": 1
  },
  "goal_id": "88bae13387ff6a8aaa41c38d4fb94403fea168c2704b28edb02bd56fe72b2b5a",
- "img_idx": 4
+ "img_idx": 5
 }

@@ -31,11 +31,13 @@
   "https://cointelegraph.com/news/nvidia-turmoil-tests-bitcoin-miners-ai-funding-plans",
   "https://bitcoinops.org/en/podcast/2026/10/13/",
   "https://cointelegraph.com/markets/mara-long-ridge-debt-offering-bitcoin-sales",
-  "https://www.theverge.com/games/967174/steam-game-malware-cryptostealer-arrest"
+  "https://www.theverge.com/games/967174/steam-game-malware-cryptostealer-arrest",
+  "https://cointelegraph.com/markets/bitcoin-hits-new-20-week-low-anthropic-drops-87-tech-sell-off",
+  "https://bitcoinops.org/en/newsletters/2026/11/20/"
  ],
- "n": 16,
+ "n": 17,
  "idx": {
-  "curiosity": 6,
+  "curiosity": 7,
   "joke": 4,
   "tip": 4,
   "ask": 2

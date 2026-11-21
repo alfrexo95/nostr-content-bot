@@ -28,6 +28,22 @@ jobs:
           NOSTR_NSEC: ${{ secrets.NOSTR_NSEC }}
           DRY_RUN: ${{ github.event.inputs.dry_run || '0' }}
         run: python content.py
+
+      - name: Register Nostr Content Bot in Predator Hub (optional)
+        if: ${{ secrets.INFRA_HUB_TOKEN != '' }}
+        continue-on-error: true
+        env:
+          HUB_TOKEN: ${{ secrets.INFRA_HUB_TOKEN }}
+          HUB_URL: https://x402-api-wigc.onrender.com
+        run: |
+          set -euo pipefail
+          curl --silent --show-error --fail --max-time 15 \
+            -H "Authorization: Bearer $HUB_TOKEN" -H "Content-Type: application/json" \
+            -d '{"agent_id":"nostr-content-bot","platform":"github-actions","capabilities":["nostr.content","publish","draft"]}' \
+            "$HUB_URL/infra/agents/register"
+          curl --silent --show-error --fail --max-time 15 \
+            -H "Authorization: Bearer $HUB_TOKEN" -H "Content-Type: application/json" \
+            -d '{}' "$HUB_URL/infra/agents/nostr-content-bot/heartbeat"
       - name: Guardar estado
         run: |
           git config user.name "content-bot"
